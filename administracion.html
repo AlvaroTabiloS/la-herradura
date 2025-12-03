@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Matrícula 2025</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/admin.css">
+<!-- En formulario.html y administracion.html, agregar: -->
+<script src="js/utils.js"></script>
+<script src="js/config.js"></script>
+<script src="js/pdf-generator.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Panel de Administración - Matrícula 2025</h1>
+            <p class="description">Colegio La Herradura - Gestión de datos y usuarios</p>
+            <nav class="main-nav">
+                <a href="index.html" class="btn btn-secondary">Inicio</a>
+                <a href="formulario.html" class="btn">Formulario</a>
+                <button id="logout-btn" class="btn btn-danger">Cerrar Sesión</button>
+            </nav>
+        </header>
+        
+        <div class="admin-panel">
+            <div class="tabs">
+                <div class="tab active" data-tab="gestion-matriculas">Gestión de Matrículas</div>
+                <div class="tab" data-tab="gestion-usuarios">Gestión de Usuarios</div>
+                <div class="tab" data-tab="exportar-datos">Exportar Datos</div>
+            </div>
+            
+            <!-- Gestión de Matrículas -->
+            <div class="tab-content active" id="gestion-matriculas">
+                <h2>Matrículas Registradas</h2>
+                <div class="actions">
+                    <button id="refresh-data" class="btn">Actualizar Datos</button>
+                    <button id="add-matricula" class="btn btn-success">Nueva Matrícula</button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table" id="matriculas-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Apellidos</th>
+                                <th>Nombres</th>
+                                <th>Cédula</th>
+                                <th>Fecha Registro</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matriculas-body">
+                            <!-- Los datos se cargarán dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Gestión de Usuarios -->
+            <div class="tab-content" id="gestion-usuarios">
+                <h2>Gestión de Usuarios Administrativos</h2>
+                <div class="form-section">
+                    <h3>Agregar Nuevo Usuario</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nuevo-usuario">Usuario:</label>
+                            <input type="text" id="nuevo-usuario">
+                        </div>
+                        <div class="form-group">
+                            <label for="nueva-contrasena">Contraseña:</label>
+                            <input type="password" id="nueva-contrasena">
+                        </div>
+                        <div class="form-group">
+                            <button id="agregar-usuario" class="btn">Agregar Usuario</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Usuarios Existentes</h3>
+                <div class="table-container">
+                    <table class="data-table" id="usuarios-table">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Fecha Creación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usuarios-body">
+                            <!-- Los datos se cargarán dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Exportar Datos -->
+            <div class="tab-content" id="exportar-datos">
+                <h2>Exportar Datos de Matrículas</h2>
+                <div class="form-section">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="formato-exportacion">Formato de exportación:</label>
+                            <select id="formato-exportacion">
+                                <option value="pdf">PDF (Ficha de Matrícula)</option>
+                                <option value="csv">CSV (Datos en tabla)</option>
+                                <option value="json">JSON (Datos estructurados)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="filtro-matricula">Filtrar por:</label>
+                            <select id="filtro-matricula">
+                                <option value="todos">Todos los registros</option>
+                                <option value="fecha">Por fecha</option>
+                                <option value="curso">Por curso</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row" id="filtro-fecha" style="display: none;">
+                        <div class="form-group">
+                            <label for="fecha-desde">Desde:</label>
+                            <input type="date" id="fecha-desde">
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha-hasta">Hasta:</label>
+                            <input type="date" id="fecha-hasta">
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button id="exportar-datos-btn" class="btn btn-success">Exportar Datos</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/export.js"></script>
+</body>
+</html>

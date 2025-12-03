@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración Google Sheets</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Configuración Google Sheets</h1>
+            <p class="description">Colegio La Herradura - Integración con Google Drive</p>
+            <nav class="main-nav">
+                <a href="index.html" class="btn btn-secondary">Inicio</a>
+                <a href="formulario.html" class="btn">Formulario</a>
+                <a href="administracion.html" class="btn">Administración</a>
+            </nav>
+        </header>
+        
+        <div class="form-section">
+            <h2>Instrucciones para configurar Google Sheets</h2>
+            
+            <div class="instructions">
+                <h3>Paso 1: Crear Google Apps Script</h3>
+                <ol>
+                    <li>Ve a <a href="https://script.google.com" target="_blank">script.google.com</a></li>
+                    <li>Crea un nuevo proyecto</li>
+                    <li>Copia y pega el código del archivo <code>google-apps-script.js</code></li>
+                    <li>Reemplaza <code>'TU_SPREADSHEET_ID'</code> con el ID de tu Google Sheets</li>
+                    <li>Guarda el proyecto</li>
+                </ol>
+                
+                <h3>Paso 2: Desplegar como aplicación web</h3>
+                <ol>
+                    <li>Haz clic en "Desplegar" → "Nueva implementación"</li>
+                    <li>Selecciona "Aplicación web"</li>
+                    <li>Configura:
+                        <ul>
+                            <li>¿Quién puede acceder? → "Cualquiera"</li>
+                            <li>Descripción: "Matrículas Colegio La Herradura"</li>
+                        </ul>
+                    </li>
+                    <li>Haz clic en "Desplegar"</li>
+                    <li>Copia la URL de la aplicación web</li>
+                </ol>
+                
+                <h3>Paso 3: Configurar aquí</h3>
+                <div class="form-group">
+                    <label for="script-url">URL de tu Google Apps Script:</label>
+                    <input type="text" id="script-url" placeholder="https://script.google.com/macros/s/.../exec" style="width: 100%; padding: 10px;">
+                </div>
+                
+                <div class="actions">
+                    <button id="test-connection" class="btn">Probar Conexión</button>
+                    <button id="save-config" class="btn btn-success">Guardar Configuración</button>
+                </div>
+                
+                <div id="test-result" class="alert hidden" style="margin-top: 20px;"></div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Preparar Google Sheets</h2>
+            <ol>
+                <li>Crea una nueva hoja de cálculo en Google Sheets</li>
+                <li>Nombra la hoja como "Matriculas"</li>
+                <li>La primera fila debe tener exactamente estos encabezados (108 columnas)</li>
+                <li>Comparte la hoja con la cuenta de servicio del Google Apps Script</li>
+            </ol>
+            
+            <p><strong>ID de la hoja de cálculo:</strong> Es la parte de la URL entre <code>/d/</code> y <code>/edit</code></p>
+            <p>Ejemplo: <code>https://docs.google.com/spreadsheets/d/<strong>TU_SPREADSHEET_ID</strong>/edit</code></p>
+        </div>
+    </div>
+
+    <script src="js/google-sheets.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar URL guardada
+            const savedUrl = localStorage.getItem('googleSheetsScriptUrl');
+            if (savedUrl) {
+                document.getElementById('script-url').value = savedUrl;
+                window.googleSheets.configure(savedUrl);
+            }
+            
+            // Probar conexión
+            document.getElementById('test-connection').addEventListener('click', async function() {
+                const url = document.getElementById('script-url').value;
+                if (!url) {
+                    showResult('Ingrese una URL válida', 'error');
+                    return;
+                }
+                
+                const testBtn = this;
+                const originalText = testBtn.textContent;
+                testBtn.textContent = 'Probando...';
+                testBtn.disabled = true;
+                
+                try {
+                    const response = await fetch(url, { method: 'GET' });
+                    const data = await response.json();
+                    
+                    if (data.code === 200) {
+                        showResult('✅ Conexión exitosa', 'success');
+                    } else {
+                        showResult('❌ Error: ' + data.message, 'error');
+                    }
+                } catch (error) {
+                    showResult('❌ Error de conexión: ' + error.message, 'error');
+                } finally {
+                    testBtn.textContent = originalText;
+                    testBtn.disabled = false;
+                }
+            });
+            
+            // Guardar configuración
+            document.getElementById('save-config').addEventListener('click', function() {
+                const url = document.getElementById('script-url').value;
+                if (url && url.includes('script.google.com')) {
+                    localStorage.setItem('googleSheetsScriptUrl', url);
+                    window.googleSheets.configure(url);
+                    showResult('✅ Configuración guardada correctamente', 'success');
+                } else {
+                    showResult('❌ Ingrese una URL válida de Google Apps Script', 'error');
+                }
+            });
+            
+            function showResult(message, type) {
+                const resultDiv = document.getElementById('test-result');
+                resultDiv.textContent = message;
+                resultDiv.className = `alert alert-${type}`;
+                resultDiv.classList.remove('hidden');
+                
+                setTimeout(() => {
+                    resultDiv.classList.add('hidden');
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test CSV Export</title>
+</head>
+<body>
+    <h1>Prueba de Exportación CSV</h1>
+    
+    <button onclick="testExport()">Probar Exportación CSV</button>
+    
+    <script src="js/csv-exporter.js"></script>
+    <script>
+        function testExport() {
+            // Datos de ejemplo para probar
+            const testData = {
+                emailUsuario: 'apoderado@colegio.com',
+                cursoEstudiante: 'Quinto Básico A',
+                apellidoPaterno: 'González',
+                apellidoMaterno: 'Pérez',
+                nombres: 'Juan Andrés',
+                cedulaIdentidad: '12345678-9',
+                nacionalidad: 'Chilena',
+                fechaNacimiento: '2010-05-15',
+                pasaporteDNI: '',
+                lugarNacimiento: 'Santiago',
+                edad: '14',
+                domicilio: 'Av. Principal 123',
+                sector: 'Centro',
+                prevision: 'Fonasa B',
+                etnia: 'Ninguna',
+                celularEmergencia: '+56912345678',
+                cultoReligioso: 'Católico',
+                nombrePadre: 'Pedro González López',
+                rutPasaportePadre: '87654321-0',
+                nacionalidadPadre: 'Chilena',
+                fechaNacimientoPadre: '1980-03-20',
+                edadPadre: '44',
+                nivelEducacionalPadre: 'Universitaria Completa',
+                emailPadre: 'padre@email.com',
+                domicilioPadre: 'Av. Principal 123',
+                sectorPadre: 'Centro',
+                celularPadre: '+56987654321',
+                ocupacionPadre: 'Ingeniero',
+                nombreMadre: 'María Pérez Rodríguez',
+                rutPasaporteMadre: '11222333-4',
+                nacionalidadMadre: 'Chilena',
+                fechaNacimientoMadre: '1982-07-10',
+                edadMadre: '42',
+                nivelEducacionalMadre: 'Universitaria Completa',
+                emailMadre: 'madre@email.com',
+                domicilioMadre: 'Av. Principal 123',
+                sectorMadre: 'Centro',
+                celularMadre: '+56911222333',
+                ocupacionMadre: 'Profesora',
+                personasConQuienVive: 'Padres',
+                tipoVivienda: 'material sólido',
+                pertenenciaVivienda: 'propia',
+                aguaPotable: 'SI',
+                tipoBano: 'alcantarillado',
+                numeroBanos: '2',
+                numeroHabitaciones: '3',
+                numeroPersonasVivienda: '4',
+                registroSocialHogares: 'NO',
+                numeroPersonasTrabajan: '2',
+                alumnoCategoria: 'Sin información',
+                hermanosEnColegio: 'NO',
+                cursosHermanos: '',
+                medioTransporte: 'locomoción colectiva',
+                tiempoTraslado: '30 minutos',
+                adultoApoyo: 'SI',
+                lugarEstudio: 'SI',
+                calificacionLugarEstudio: '6.5',
+                perteneceProgramaSocial: 'NO',
+                cualProgramaSocial: '',
+                nombreApoderadoTitular: 'Pedro González López',
+                celularTitular: '+56987654321',
+                rutPasaporteTitular: '87654321-0',
+                emailTitular: 'apoderado@email.com',
+                nivelEducacionalTitular: 'Universitaria Completa',
+                situacionLaboralTitular: 'Con trabajo',
+                lugarTrabajoTitular: 'Fuera del hogar',
+                nombreApoderadoSuplente: 'María Pérez Rodríguez',
+                celularSuplente: '+56911222333',
+                rutPasaporteSuplente: '11222333-4',
+                emailSuplente: 'suplente@email.com',
+                colegioProcedencia: 'Colegio San José',
+                haRepetido: 'NO',
+                cursosRepetidos: '',
+                pertenecePIE: 'NO',
+                diagnosticoPIE: '',
+                padeceEnfermedad: 'NO',
+                cualEnfermedad: '',
+                tomaMedicamento: 'NO',
+                cualMedicamento: '',
+                esAlergico: 'SI',
+                cualAlergia: 'Polen',
+                medicamentoContraindicado: 'NO',
+                cualMedicamentoContraindicado: '',
+                problemaSaludEF: 'NO',
+                cualProblemaSaludEF: '',
+                nombreRetiro1: 'Pedro González',
+                rutPasaporteRetiro1: '87654321-0',
+                celularRetiro1: '+56987654321',
+                parentescoRetiro1: 'Padre',
+                nombreRetiro2: 'María Pérez',
+                rutPasaporteRetiro2: '11222333-4',
+                celularRetiro2: '+56911222333',
+                parentescoRetiro2: 'Madre',
+                declaracion1: 'Acepto',
+                declaracion2: 'Acepto',
+                declaracion3: 'Acepto',
+                nombreApoderadoFirma: 'Pedro González López',
+                rutPasaporteFirma: '87654321-0',
+                problemaVisual: 'NO',
+                problemaAuditivo: 'NO',
+                problemaCardiaco: 'NO',
+                problemaColumna: 'NO',
+                peso: '55',
+                talla: '165',
+                grupoSanguineo: 'O+'
+            };
+            
+            // Usar el exportador
+            if (typeof window.exportToCSV === 'function') {
+                window.exportToCSV(testData);
+                alert('CSV exportado correctamente con datos de ejemplo');
+            } else {
+                alert('Error: Exportador CSV no disponible');
+            }
+        }
+    </script>
+</body>
+</html>

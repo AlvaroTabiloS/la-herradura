@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Matrícula 2025 - Colegio La Herradura</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/form.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- En formulario.html y administracion.html, agregar: -->
+<script src="js/utils.js"></script>
+<script src="js/config.js"></script>
+<script src="js/pdf-generator.js"></script>
+<script src="js/cursos.js"></script>
+</head>
+
+
+
+
+<body>
+
+
+    <div class="container">
+        <header>
+            <h1>Formulario de Matrícula 2025</h1>
+            <p class="description">Colegio La Herradura - Complete todos los campos obligatorios</p>
+            <nav class="main-nav">
+                <a href="index.html" class="btn btn-secondary">Inicio</a>
+                <a href="administracion.html" class="btn">Administración</a>
+            </nav>
+        </header>
+        
+        <!-- Botón de configuración de Google Sheets (solo para admin) 
+        <div id="gsheets-config" class="hidden" style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+            <h3>Configuración Google Sheets</h3>
+            <div class="form-row">
+                <div class="form-group" style="flex: 3;">
+                    <label for="gsheets-url">URL del Script:</label>
+                    <input type="text" id="gsheets-url" placeholder="https://script.google.com/macros/s/.../exec" style="width: 100%;">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <button id="save-gsheets-config" class="btn btn-success">Guardar</button>
+                </div>
+            </div>
+        </div>-->
+        
+        <div class="actions">
+            <button id="save-form-btn" class="btn btn-success">Guardar Matrícula</button>
+            <button id="send-to-drive-btn" class="btn btn-warning">Enviar a Google Sheets</button>
+            <!--<button id="preview-pdf-btn" class="btn">Vista Previa PDF</button>
+            <button id="export-csv-btn" class="btn btn-secondary">Exportar CSV</button>-->
+            <button id="clear-form-btn" class="btn btn-danger">Limpiar</button>
+        </div>
+        
+        <div id="form-alert" class="alert hidden"></div>
+        
+<form id="matricula-form">
+                <div class="tabs">
+                    <div class="tab active" data-tab="datos-alumno">1. Datos del Alumno</div>
+                    <div class="tab" data-tab="antecedentes-familiares">2. Antecedentes Familiares</div>
+                    <div class="tab" data-tab="antecedentes-sociales">3. Antecedentes Sociales</div>
+                    <div class="tab" data-tab="apoderados">4. Apoderados</div>
+                    <div class="tab" data-tab="academicos">5. Antecedentes Académicos</div>
+                    <div class="tab" data-tab="salud">6. Antecedentes de Salud</div>
+                    <div class="tab" data-tab="verificacion">7. Verificación</div>
+                </div>
+                
+                <!-- Sección 1: Datos del Alumno -->
+                <div class="tab-content active" id="datos-alumno">
+                    <div class="form-section">
+                <h3><span class="section-counter">0</span> Correo Electrónico del Apoderado que completa la ficha</h3>
+
+                        <div class="form-group">
+                        <label for="emailUsuario" class="required">Correo electrónico del apoderado:</label>
+                        <input type="email" id="emailUsuario" name="emailUsuario" required 
+                            placeholder="ejemplo@email.com">
+                    </div>
+                        <h3><span class="section-counter">1</span> Datos del Alumno/a</h3>
+                         <!-- Nuevo: Correo electrónico del usuario -->
+                    
+                    
+                    <!-- Nuevo: Curso del estudiante -->
+                    <div class="form-group">
+                        <label for="cursoEstudiante" class="required">Curso del estudiante:</label>
+                        <select id="cursoEstudiante" name="cursoEstudiante" required>
+                            <option value="">Seleccione un curso</option>
+                            <option value="Pre-Kinder">Pre-Kinder</option>
+                            <option value="Kinder">Kinder</option>
+                            <option value="Primero Básico A">Primero Básico A</option>
+                            <option value="Primero Básico B">Primero Básico B</option>
+                            <option value="Segundo Básico A">Segundo Básico A</option>
+                            <option value="Tercero Básico A">Tercero Básico A</option>
+                            <option value="Cuarto Básico A">Cuarto Básico A</option>
+                            <option value="Quinto Básico A">Quinto Básico A</option>
+                            <option value="Sexto Básico A">Sexto Básico A</option>
+                            <option value="Séptimo Básico A">Séptimo Básico A</option>
+                            <option value="Octavo Básico A">Octavo Básico A</option>
+                        </select>
+                    </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="apellidoPaterno" class="required">Apellido Paterno:</label>
+                                <input type="text" id="apellidoPaterno" name="apellidoPaterno" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="apellidoMaterno" class="required">Apellido Materno:</label>
+                                <input type="text" id="apellidoMaterno" name="apellidoMaterno" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nombres" class="required">Nombres:</label>
+                            <input type="text" id="nombres" name="nombres" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cedulaIdentidad" class="required">Cédula de Identidad:</label>
+                                <input type="text" id="cedulaIdentidad" name="cedulaIdentidad" placeholder="00000000-0" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="nacionalidad" class="required">Nacionalidad:</label>
+                                <input type="text" id="nacionalidad" name="nacionalidad" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fechaNacimiento" class="required">Fecha de Nacimiento:</label>
+                                <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="pasaporteDNI">N° Pasaporte o DNI:</label>
+                                <input type="text" id="pasaporteDNI" name="pasaporteDNI">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lugarNacimiento" class="required">Lugar de Nacimiento (ciudad o comuna):</label>
+                                <input type="text" id="lugarNacimiento" name="lugarNacimiento" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="edad" class="required">Edad:</label>
+                                <input type="number" id="edad" name="edad" min="3" max="20" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="domicilio" class="required">Domicilio:</label>
+                            <input type="text" id="domicilio" name="domicilio" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sector" class="required">Sector:</label>
+                                <input type="text" id="sector" name="sector" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="prevision" class="required">Fonasa (A,B,C,D) o Isapre o sin previsión:</label>
+                                <select id="prevision" name="prevision" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="Fonasa A">Fonasa A</option>
+                                    <option value="Fonasa B">Fonasa B</option>
+                                    <option value="Fonasa C">Fonasa C</option>
+                                    <option value="Fonasa D">Fonasa D</option>
+                                    <option value="Isapre">Isapre</option>
+                                    <option value="Sin previsión">Sin previsión</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="etnia" class="required">Etnia:</label>
+                                <input type="text" id="etnia" name="etnia" placeholder="Si no tiene escribir 'ninguna'" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="celularEmergencia" class="required">Celular de Emergencia:</label>
+                                <input type="tel" id="celularEmergencia" name="celularEmergencia" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cultoReligioso" class="required">Culto religioso:</label>
+                            <input type="text" id="cultoReligioso" name="cultoReligioso" required>
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="button" class="btn next-tab" data-next="antecedentes-familiares">Siguiente</button>
+                    </div>
+                </div>
+                
+                <!-- Sección 2: Antecedentes Familiares -->
+                <div class="tab-content" id="antecedentes-familiares">
+                    <div class="form-section">
+                        <h3><span class="section-counter">2</span> Antecedentes Familiares - Padre</h3>
+                        
+                        <div class="form-group">
+                            <label for="nombrePadre">Nombre Completo del Padre:</label>
+                            <input type="text" id="nombrePadre" name="nombrePadre">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rutPasaportePadre">Rut o Pasaporte:</label>
+                                <input type="text" id="rutPasaportePadre" name="rutPasaportePadre">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="nacionalidadPadre">Nacionalidad:</label>
+                                <input type="text" id="nacionalidadPadre" name="nacionalidadPadre">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fechaNacimientoPadre">Fecha de Nacimiento:</label>
+                                <input type="date" id="fechaNacimientoPadre" name="fechaNacimientoPadre">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="edadPadre">Edad:</label>
+                                <input type="number" id="edadPadre" name="edadPadre" min="18" max="100">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nivelEducacionalPadre">Nivel Educacional:</label>
+                                <input type="text" id="nivelEducacionalPadre" name="nivelEducacionalPadre">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="emailPadre">E-Mail:</label>
+                                <input type="email" id="emailPadre" name="emailPadre">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="domicilioPadre">Domicilio:</label>
+                            <input type="text" id="domicilioPadre" name="domicilioPadre">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sectorPadre">Sector:</label>
+                                <input type="text" id="sectorPadre" name="sectorPadre">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="celularPadre">Celular:</label>
+                                <input type="tel" id="celularPadre" name="celularPadre">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ocupacionPadre">Ocupación actual:</label>
+                            <input type="text" id="ocupacionPadre" name="ocupacionPadre">
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Antecedentes Familiares - Madre</h3>
+                        
+                        <div class="form-group">
+                            <label for="nombreMadre">Nombre Completo de la Madre:</label>
+                            <input type="text" id="nombreMadre" name="nombreMadre">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="rutPasaporteMadre">Rut o Pasaporte:</label>
+                                <input type="text" id="rutPasaporteMadre" name="rutPasaporteMadre">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="nacionalidadMadre">Nacionalidad:</label>
+                                <input type="text" id="nacionalidadMadre" name="nacionalidadMadre">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fechaNacimientoMadre">Fecha de Nacimiento:</label>
+                                <input type="date" id="fechaNacimientoMadre" name="fechaNacimientoMadre">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="edadMadre">Edad:</label>
+                                <input type="number" id="edadMadre" name="edadMadre" min="18" max="100">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nivelEducacionalMadre">Nivel Educacional:</label>
+                                <input type="text" id="nivelEducacionalMadre" name="nivelEducacionalMadre">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="emailMadre">E-Mail:</label>
+                                <input type="email" id="emailMadre" name="emailMadre">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="domicilioMadre">Domicilio:</label>
+                            <input type="text" id="domicilioMadre" name="domicilioMadre">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sectorMadre">Sector:</label>
+                                <input type="text" id="sectorMadre" name="sectorMadre">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="celularMadre">Celular:</label>
+                                <input type="tel" id="celularMadre" name="celularMadre">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="ocupacionMadre">Ocupación actual:</label>
+                            <input type="text" id="ocupacionMadre" name="ocupacionMadre">
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Antecedentes Familiares</h3>
+                        
+                        <div class="form-group">
+                            <label for="personasConQuienVive" class="required">Persona(s) con quién vive el alumno/a (Vínculo: padres, madre, papá, abuelos...):</label>
+                            <input type="text" id="personasConQuienVive" name="personasConQuienVive" required>
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="button" class="btn prev-tab" data-prev="datos-alumno">Anterior</button>
+                        <button type="button" class="btn next-tab" data-next="antecedentes-sociales">Siguiente</button>
+                    </div>
+                </div>
+                
+                <!-- Sección 3: Antecedentes Sociales -->
+                <div class="tab-content" id="antecedentes-sociales">
+                    <div class="form-section">
+                        <h3><span class="section-counter">3</span> Antecedentes Sociales de la Familia</h3>
+                        
+                        <div class="form-group">
+                            <label for="tipoVivienda" class="required">Tipo de vivienda:</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="materialSolido" name="tipoVivienda" value="material sólido" required>
+                                    <label for="materialSolido">Material sólido</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="materialLigero" name="tipoVivienda" value="material ligero" required>
+                                    <label for="materialLigero">Material ligero</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="materialMixto" name="tipoVivienda" value="material mixto" required>
+                                    <label for="materialMixto">Material mixto</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pertenenciaVivienda" class="required">Pertenencia de la vivienda:</label>
+                            <select id="pertenenciaVivienda" name="pertenenciaVivienda" required>
+                                <option value="">Seleccione</option>
+                                <option value="propia">Propia</option>
+                                <option value="arrendada">Arrendada</option>
+                                <option value="cedida">Cedida</option>
+                                <option value="allegado">Allegado</option>
+                                <option value="en toma">En toma</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="aguaPotable" class="required">Agua potable:</label>
+                                <select id="aguaPotable" name="aguaPotable" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="tipoBano" class="required">Tipo de baño:</label>
+                                <select id="tipoBano" name="tipoBano" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="alcantarillado">Alcantarillado</option>
+                                    <option value="fosa séptica">Fosa séptica</option>
+                                    <option value="pozo">Pozo</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="numeroBanos" class="required">N° de baños:</label>
+                                <input type="number" id="numeroBanos" name="numeroBanos" min="0" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="numeroHabitaciones" class="required">N° de habitaciones de la vivienda:</label>
+                                <input type="number" id="numeroHabitaciones" name="numeroHabitaciones" min="1" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="numeroPersonasVivienda" class="required">N° de personas que habitan la vivienda:</label>
+                                <input type="number" id="numeroPersonasVivienda" name="numeroPersonasVivienda" min="1" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="registroSocialHogares" class="required">Tiene registro social de hogares:</label>
+                                <select id="registroSocialHogares" name="registroSocialHogares" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="numeroPersonasTrabajan" class="required">N° de personas del grupo familiar que trabajan:</label>
+                                <input type="number" id="numeroPersonasTrabajan" name="numeroPersonasTrabajan" min="0" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="alumnoCategoria" class="required">Alumno/a:</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="prioritario" name="alumnoCategoria" value="Prioritario" required>
+                                    <label for="prioritario">Prioritario</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="preferente" name="alumnoCategoria" value="Preferente" required>
+                                    <label for="preferente">Preferente</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="sinInformacion" name="alumnoCategoria" value="Sin información" required>
+                                    <label for="sinInformacion">Sin información</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="hermanosEnColegio" class="required">Tiene hermanos en el Colegio:</label>
+                                <select id="hermanosEnColegio" name="hermanosEnColegio" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cursosHermanos">¿En qué curso tiene hermanos?:</label>
+                                <input type="text" id="cursosHermanos" name="cursosHermanos">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="medioTransporte" class="required">Medio de transporte para llegar al Colegio:</label>
+                            <select id="medioTransporte" name="medioTransporte" required>
+                                <option value="">Seleccione</option>
+                                <option value="propia">Propia</option>
+                                <option value="locomoción colectiva">Locomoción colectiva</option>
+                                <option value="propia y locomoción colectiva">Propia y locomoción colectiva</option>
+                                <option value="caminando">Caminando</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="tiempoTraslado" class="required">Tiempo que tarda en el traslado desde su hogar al Colegio:</label>
+                            <input type="text" id="tiempoTraslado" name="tiempoTraslado" placeholder="Ej: 30 minutos" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="adultoApoyo" class="required">Existe algún adulto que apoye en el aprendizaje y labores escolares del alumno/a en el hogar:</label>
+                                <select id="adultoApoyo" name="adultoApoyo" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lugarEstudio" class="required">Existe en el hogar un lugar adecuado para realizar las labores escolares:</label>
+                                <select id="lugarEstudio" name="lugarEstudio" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="calificacionLugarEstudio">Si existe el lugar para realizar las labores escolares, ¿cómo lo calificaría con nota del 1.0 a 7.0?:</label>
+                            <input type="number" id="calificacionLugarEstudio" name="calificacionLugarEstudio" min="1.0" max="7.0" step="0.1">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="perteneceProgramaSocial" class="required">Pertenece algún Programa Social (Junaeb, Chile Solidario, Organismo colaborador del Sename u otro):</label>
+                                <select id="perteneceProgramaSocial" name="perteneceProgramaSocial" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cualProgramaSocial">Si respondió SI, ¿Cuál sería?</label>
+                                <input type="text" id="cualProgramaSocial" name="cualProgramaSocial">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="button" class="btn prev-tab" data-prev="antecedentes-familiares">Anterior</button>
+                        <button type="button" class="btn next-tab" data-next="apoderados">Siguiente</button>
+                    </div>
+                </div>
+                
+                <!-- Sección 4: Apoderados -->
+                <div class="tab-content" id="apoderados">
+                    <div class="form-section">
+                        <h3><span class="section-counter">4</span> Nombre del Apoderado/a Titular y Suplente</h3>
+                        
+                        <div class="form-group">
+                            <label for="nombreApoderadoTitular" class="required">Nombre Completo Apoderado/a Titular:</label>
+                            <input type="text" id="nombreApoderadoTitular" name="nombreApoderadoTitular" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="celularTitular" class="required">Celular:</label>
+                                <input type="tel" id="celularTitular" name="celularTitular" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rutPasaporteTitular" class="required">Rut o Pasaporte:</label>
+                                <input type="text" id="rutPasaporteTitular" name="rutPasaporteTitular" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="emailTitular" class="required">E-Mail:</label>
+                            <input type="email" id="emailTitular" name="emailTitular" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nivelEducacionalTitular" class="required">Indique el último nivel educacional cursado:</label>
+                            <input type="text" id="nivelEducacionalTitular" name="nivelEducacionalTitular" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="required">¿Cuál es su situación laboral actual?</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="sinTrabajo" name="situacionLaboralTitular" value="Sin trabajo" required>
+                                    <label for="sinTrabajo">Sin trabajo</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="conTrabajo" name="situacionLaboralTitular" value="Con trabajo" required>
+                                    <label for="conTrabajo">Con trabajo</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" id="lugarTrabajoGroup">
+                            <label class="required">Si actualmente se encuentra trabajando, ¿dónde trabaja principalmente?</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="trabajoHogar" name="lugarTrabajoTitular" value="En el hogar">
+                                    <label for="trabajoHogar">En el hogar</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="trabajoFuera" name="lugarTrabajoTitular" value="Fuera del hogar">
+                                    <label for="trabajoFuera">Fuera del hogar</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nombreApoderadoSuplente">Nombre Completo Apoderado/a Suplente:</label>
+                            <input type="text" id="nombreApoderadoSuplente" name="nombreApoderadoSuplente">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="celularSuplente">Celular:</label>
+                                <input type="tel" id="celularSuplente" name="celularSuplente">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rutPasaporteSuplente">Rut o Pasaporte:</label>
+                                <input type="text" id="rutPasaporteSuplente" name="rutPasaporteSuplente">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="emailSuplente">E-Mail:</label>
+                            <input type="email" id="emailSuplente" name="emailSuplente">
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="button" class="btn prev-tab" data-prev="antecedentes-sociales">Anterior</button>
+                        <button type="button" class="btn next-tab" data-next="academicos">Siguiente</button>
+                    </div>
+                </div>
+                
+                <!-- Sección 5: Antecedentes Académicos -->
+                <div class="tab-content" id="academicos">
+                    <div class="form-section">
+                        <h3><span class="section-counter">5</span> Antecedentes Académicos del Alumno/a</h3>
+                        
+                        <div class="form-group">
+                            <label for="colegioProcedencia" class="required">Colegio de procedencia:</label>
+                            <input type="text" id="colegioProcedencia" name="colegioProcedencia" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="haRepetido" class="required">Ha repetido algún curso:</label>
+                                <select id="haRepetido" name="haRepetido" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cursosRepetidos">Si respondió SI, ¿qué curso(s)?:</label>
+                                <input type="text" id="cursosRepetidos" name="cursosRepetidos">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="pertenecePIE" class="required">¿Pertenece a un Programa Integración Escolar PIE?:</label>
+                                <select id="pertenecePIE" name="pertenecePIE" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="diagnosticoPIE">Si respondió SI, ¿Cuál sería el diagnóstico?</label>
+                                <textarea id="diagnosticoPIE" name="diagnosticoPIE" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="button" class="btn prev-tab" data-prev="apoderados">Anterior</button>
+                        <button type="button" class="btn next-tab" data-next="salud">Siguiente</button>
+                    </div>
+                </div>
+                
+                <!-- Sección 6: Antecedentes de Salud -->
+                <div class="tab-content" id="salud">
+                    <div class="form-section">
+                        <h3><span class="section-counter">6</span> Antecedentes de Salud del Alumno/a</h3>
+                        
+                        <div class="form-group">
+                            <label>Problemas de salud:</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="problemaVisual" name="problemaVisual" value="SI">
+                                    <label for="problemaVisual">Visual</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="problemaAuditivo" name="problemaAuditivo" value="SI">
+                                    <label for="problemaAuditivo">Auditivo</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="problemaCardiaco" name="problemaCardiaco" value="SI">
+                                    <label for="problemaCardiaco">Cardiaco</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="problemaColumna" name="problemaColumna" value="SI">
+                                    <label for="problemaColumna">Columna</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="padeceEnfermedad" class="required">¿Padece alguna enfermedad?:</label>
+                                <select id="padeceEnfermedad" name="padeceEnfermedad" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cualEnfermedad">Si respondió SI, ¿cuál sería?:</label>
+                                <input type="text" id="cualEnfermedad" name="cualEnfermedad">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="tomaMedicamento" class="required">Toma algún medicamento:</label>
+                                <select id="tomaMedicamento" name="tomaMedicamento" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cualMedicamento">Si respondió SI, ¿cuál sería?:</label>
+                                <input type="text" id="cualMedicamento" name="cualMedicamento">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="esAlergico" class="required">Es alérgico/a:</label>
+                                <select id="esAlergico" name="esAlergico" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cualAlergia">Si respondió SI, ¿cuál sería?:</label>
+                                <input type="text" id="cualAlergia" name="cualAlergia">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="medicamentoContraindicado" class="required">¿Tiene algún medicamento contraindicado?:</label>
+                                <select id="medicamentoContraindicado" name="medicamentoContraindicado" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cualMedicamentoContraindicado">Si respondió SI, ¿cuál sería?:</label>
+                                <input type="text" id="cualMedicamentoContraindicado" name="cualMedicamentoContraindicado">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="problemaSaludEF" class="required">Problemas de Salud Significativo para no realizar Asignatura de Educación Física:</label>
+                                <select id="problemaSaludEF" name="problemaSaludEF" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="SI">SI</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cualProblemaSaludEF">Si respondió SI, ¿cuál sería?:</label>
+                                <input type="text" id="cualProblemaSaludEF" name="cualProblemaSaludEF">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="peso" class="required">Peso(kg):</label>
+                                <input type="number" id="peso" name="peso" min="0" step="0.1" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="talla" class="required">Talla(cm):</label>
+                                <input type="number" id="talla" name="talla" min="0" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="grupoSanguineo" class="required">Grupo Sanguíneo:</label>
+                                <input type="text" id="grupoSanguineo" name="grupoSanguineo" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Autorización para realizar retiro diario del alumno/a del colegio</h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombreRetiro1">Nombre:</label>
+                                <input type="text" id="nombreRetiro1" name="nombreRetiro1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rutPasaporteRetiro1">Rut o pasaporte:</label>
+                                <input type="text" id="rutPasaporteRetiro1" name="rutPasaporteRetiro1">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="celularRetiro1">Celular:</label>
+                                <input type="tel" id="celularRetiro1" name="celularRetiro1">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="parentescoRetiro1">Parentesco:</label>
+                                <input type="text" id="parentescoRetiro1" name="parentescoRetiro1">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombreRetiro2">Nombre:</label>
+                                <input type="text" id="nombreRetiro2" name="nombreRetiro2">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rutPasaporteRetiro2">Rut o pasaporte:</label>
+                                <input type="text" id="rutPasaporteRetiro2" name="rutPasaporteRetiro2">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="celularRetiro2">Celular:</label>
+                                <input type="tel" id="celularRetiro2" name="celularRetiro2">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="parentescoRetiro2">Parentesco:</label>
+                                <input type="text" id="parentescoRetiro2" name="parentescoRetiro2">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="button" class="btn prev-tab" data-prev="academicos">Anterior</button>
+                        <button type="button" class="btn next-tab" data-next="verificacion">Siguiente</button>
+                    </div>
+                </div>
+                
+                <!-- Sección 7: Verificación -->
+                <div class="tab-content" id="verificacion">
+                    <div class="form-section">
+                        <h3><span class="section-counter">7</span> Verificación</h3>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="declaracion1" name="declaracion1" value="Acepto" required>
+                                <label for="declaracion1" class="required">Declaro conocer y aceptar el Proyecto Educativo, Reglamento Interno y Reglamento de Evaluación del Colegio La Herradura, así como, las responsabilidades que debo cumplir como Apoderado/a, especialmente en asistir al establecimiento educacional, cada vez que sea citado o a reuniones de curso.</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="declaracion2" name="declaracion2" value="Acepto" required>
+                                <label for="declaracion2" class="required">La información entregada es fidedigna, haciéndome responsable de cualquier omisión. Además, me comprometo a actualizar los datos de la Ficha Escolar, cuando sea necesario.</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="declaracion3" name="declaracion3" value="Acepto" required>
+                                <label for="declaracion3" class="required">Autorizo al Colegio La Herradura a utilizar medios audiovisuales y fotográficos de mi pupilo/a en actividades de difusión del Colegio ante la comunidad.</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="nombreApoderadoFirma" class="required">Nombre apoderado que firmará:</label>
+                                <input type="text" id="nombreApoderadoFirma" name="nombreApoderadoFirma" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="rutPasaporteFirma" class="required">RUT o PASAPORTE del apoderado que firmará:</label>
+                                <input type="text" id="rutPasaporteFirma" name="rutPasaporteFirma" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="actions">
+                        <button type="button" class="btn prev-tab" data-prev="salud">Anterior</button>
+                        <button type="submit" class="btn btn-success">Enviar Matrícula</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    <!-- Scripts -->
+    <script src="js/csv-exporter.js"></script>
+    <script src="js/pdf-generator.js"></script>
+    <script src="js/google-sheets.js"></script>
+    <script src="js/form.js"></script>
+    
+    <script>
+        // Mostrar configuración si es admin
+        document.addEventListener('DOMContentLoaded', function() {
+            const isAdmin = localStorage.getItem('adminLoggedIn') === 'true';
+            if (isAdmin) {
+                document.getElementById('gsheets-config').classList.remove('hidden');
+                
+                // Cargar URL guardada
+                const savedUrl = localStorage.getItem('googleSheetsScriptUrl');
+                if (savedUrl) {
+                    document.getElementById('gsheets-url').value = savedUrl;
+                }
+                
+                // Guardar configuración
+                document.getElementById('save-gsheets-config').addEventListener('click', function() {
+                    const url = document.getElementById('gsheets-url').value;
+                    if (url && url.includes('script.google.com')) {
+                        localStorage.setItem('googleSheetsScriptUrl', url);
+                        window.googleSheets.configure(url);
+                        alert('Configuración guardada correctamente');
+                    } else {
+                        alert('Por favor, ingrese una URL válida de Google Apps Script');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
