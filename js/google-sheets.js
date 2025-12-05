@@ -3,7 +3,7 @@ class GoogleSheetsIntegration {
     constructor() {
         // URL de tu Google Apps Script (debes crear uno)
         this.scriptUrl = 'https://script.google.com/macros/s/AKfycbz9shXnV50b0-6usTSX4aHEenUHkf7tKVzPadHrfiaVZPj8iB3-B2O3REkG1FtqGl3j4g/exec'; // Reemplaza con tu URL
-        this.isConfigured = false;
+        this.isConfigured = true;
         this.sheetHeaders = [
             'Marca temporal',
             'Dirección de correo electrónico',

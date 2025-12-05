@@ -76,13 +76,12 @@
 
     <script src="js/google-sheets.js"></script>
     <script>
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9shXnV50b0-6usTSX4aHEenUHkf7tKVzPadHrfiaVZPj8iB3-B2O3REkG1FtqGl3j4g/exec';
         document.addEventListener('DOMContentLoaded', function() {
             // Cargar URL guardada
-            const savedUrl = localStorage.getItem('googleSheetsScriptUrl');
-            if (savedUrl) {
-                document.getElementById('script-url').value = savedUrl;
-                window.googleSheets.configure(savedUrl);
-            }
+            
+                window.googleSheets.configure(GOOGLE_SCRIPT_URL);
+            
             
             // Probar conexión
             document.getElementById('test-connection').addEventListener('click', async function() {

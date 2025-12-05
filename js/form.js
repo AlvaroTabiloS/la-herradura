@@ -4,6 +4,7 @@
 
 // Variable para controlar las pestañas
 let currentTab = 'datos-alumno';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9shXnV50b0-6usTSX4aHEenUHkf7tKVzPadHrfiaVZPj8iB3-B2O3REkG1FtqGl3j4g/exec';
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
@@ -17,17 +18,21 @@ document.addEventListener('DOMContentLoaded', function() {
 // Agregar esta función en form.js, después de las demás funciones
 function setupGoogleSheetsIntegration() {
     const sendBtn = document.getElementById('send-to-drive-btn');
+
     if (sendBtn) {
         sendBtn.addEventListener('click', async function() {
+
+            
             if (!validateCompleteForm()) {
                 showFormAlert('Complete todos los campos obligatorios antes de enviar', 'error');
                 return;
             }
             
             // Verificar si Google Sheets está configurado
-            const scriptUrl = localStorage.getItem('googleSheetsScriptUrl');
-            if (!scriptUrl || !window.googleSheets) {
-                showFormAlert('Google Sheets no está configurado. Contacte al administrador.', 'error');
+            window.googleSheets.configure(GOOGLE_SCRIPT_URL);
+
+            if (!window.googleSheets.isConfigured) {
+                showFormAlert('La integración con Google Sheets no está configurada correctamente.', 'error');
                 return;
             }
             
@@ -1245,11 +1250,15 @@ function generateAntecedentesSocialesSection() {
     
     try {
         // Verificar si Google Sheets está configurado
-        const scriptUrl = localStorage.getItem('googleSheetsScriptUrl');
-        if (!scriptUrl || !window.googleSheets) {
-            throw new Error('Google Sheets no está configurado');
-        }
         
+        window.googleSheets.configure(GOOGLE_SCRIPT_URL);
+        
+        if (!window.googleSheets.isConfigured) {
+        const scriptUrl = localStorage.getItem('googleSheetsScriptUrl');
+            if (!scriptUrl || !window.googleSheets) {
+                throw new Error('Google Sheets no está configurado');
+            }
+        }
         // Enviar a Google Sheets
         const result = await window.googleSheets.sendToGoogleSheets(matriculaData);
         
